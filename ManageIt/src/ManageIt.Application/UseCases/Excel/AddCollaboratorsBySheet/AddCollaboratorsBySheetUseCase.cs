@@ -1,5 +1,6 @@
 ﻿using ManageIt.Communication.Responses;
 using ManageIt.Domain.Entities;
+using ManageIt.Domain.Entities.Enums;
 using ManageIt.Domain.Repositories.Collaborators;
 using OfficeOpenXml;
 using System.Globalization;
@@ -53,8 +54,10 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
                         try
                         {
                             var name = worksheet.Cells[row, 1].Text;
+                            var position = GetPositionFromRow(worksheet.Cells[row, 2].Text);
+                            var cpf = worksheet.Cells[row, 3].Text;
 
-                            var collaborator = await _collaboratorReadOnlyRepository.GetByName(name) ?? new Collaborator { Name = name };
+                            var collaborator = await _collaboratorReadOnlyRepository.GetByName(name) ?? new Collaborator { Name = name, CPF = cpf, Position = position };
 
                             AddOrUpdateExamsFromRow(collaborator, worksheet, row);
 
@@ -93,16 +96,17 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
             if (worksheet == null) throw new ArgumentNullException(nameof(worksheet));
             if (collaborator == null) throw new ArgumentNullException(nameof(collaborator));
 
-            collaborator.Exams ??= new List<CollaboratorExam>();
+            collaborator.Exams ??= [];
 
             var exams = new List<(string ExamName, string ExamDateText)>
             {
-                ("ASO", worksheet.Cells[row, 2].Text),
-                ("Avaliacao Psicologica", worksheet.Cells[row, 3].Text),
-                ("NR10", worksheet.Cells[row, 4].Text),
-                ("NR35", worksheet.Cells[row, 5].Text),
-                ("Direcao Defensiva", worksheet.Cells[row, 7].Text),
-                ("HAR", worksheet.Cells[row, 8].Text)
+                ("ASO", worksheet.Cells[row, 4].Text),
+                ("Avaliacao Psicologica", worksheet.Cells[row, 5].Text),
+                ("NR10", worksheet.Cells[row, 6].Text),
+                ("NR35", worksheet.Cells[row, 7].Text),
+                ("CNH", worksheet.Cells[row, 8].Text),
+                ("Direcao Defensiva", worksheet.Cells[row, 9].Text),
+                ("HAR", worksheet.Cells[row, 10].Text)
             };
 
             foreach (var e in exams)
@@ -111,7 +115,7 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
                 var examDateText = e.ExamDateText;
                 if (string.IsNullOrWhiteSpace(examDateText)) continue;
 
-                if (DateTime.TryParseExact(examDateText, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime examDate))
+                if (DateTime.TryParseExact(examDateText, "d/M/yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime examDate))
                 {
                     try
                     {
@@ -131,6 +135,54 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
                         Console.WriteLine($"Erro ao calcular data de vencimento para o exame '{examName}': {ex.Message}");
                     }
                 }
+            }
+        }
+        private static PositionEnum GetPositionFromRow(string row)
+        {
+            switch (row)
+            {
+                case "MOTORISTA OPERADOR DE MAQUINA PERFURATRIZ":
+                    return PositionEnum.DrillingMachineOperator;
+                case "AUXILIAR DE SERVIÇOS":
+                    return PositionEnum.ServicesAssistant;
+                case "ELETRICISTA":
+                    return PositionEnum.Eletricist;
+                case "SERVENTE DE OBRAS":
+                    return PositionEnum.ConstructionWorker;
+                case "TEC EM SEGURANCA DO TRABALHO":
+                    return PositionEnum.WorkSecurityTecnician;
+                case "ENCARREGADO/ MESTRE DE OBRA":
+                    return PositionEnum.ConstructionMaster;
+                case "PORTEIRO":
+                    return PositionEnum.Doorman;
+                case "MONTADOR":
+                    return PositionEnum.Assembler;
+                case "MOTORISTA OP. GUINDAUTO":
+                    return PositionEnum.GuindautoOperatorDriver;
+                case "CHEFE DE TURMA":
+                    return PositionEnum.CrewMaster;
+                case "ELETROTECNICO":
+                    return PositionEnum.ElectricalTechnician;
+                case "OPERADOR DE RETRO-ESCAVADEIRA":
+                    return PositionEnum.BackhoeOperator;
+                case "ALMOXARIFE":
+                    return PositionEnum.Warehouseman;
+                case "SUPERVISOR":
+                    return PositionEnum.Supervisor;
+                case "VIGIA":
+                    return PositionEnum.Watchman;
+                case "COZINHEIRO EM GERAL":
+                    return PositionEnum.Chef;
+                case "ASSIST. ADMINISTRATIVO-APRENDIZ":
+                    return PositionEnum.ApprenticeAdministrativeAssistant;
+                case "ASSIST. ADMINISTRATIVO":
+                    return PositionEnum.AdministrativeAssistant;
+                case "COORDENADOR":
+                    return PositionEnum.Coordinator;
+                case "AUX. ADMINISTRATIVO":
+                    return PositionEnum.AdministrativeAssistant;
+                default:
+                    return PositionEnum.Chef;
             }
         }
     }

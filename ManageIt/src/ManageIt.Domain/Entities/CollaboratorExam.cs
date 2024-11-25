@@ -39,6 +39,7 @@ namespace ManageIt.Domain.Entities
             switch (ExamName.ToLower())
             {
                 case "aso":
+                case "avaliacao psicologica":
                     expiryDate = ExamDate.AddYears(1);
                     return expiryDate;
 
