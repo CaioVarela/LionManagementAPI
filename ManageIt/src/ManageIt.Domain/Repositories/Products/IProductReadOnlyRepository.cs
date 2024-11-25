@@ -6,6 +6,6 @@ namespace ManageIt.Domain.Repositories.Products
     {
         Task<List<Product>> GetAll();
         Task<Product?> GetById(Guid id);
-        Task<List<Product?>> GetByName(string name);
+        Task<Product?> GetByName(string name);
     }
 }

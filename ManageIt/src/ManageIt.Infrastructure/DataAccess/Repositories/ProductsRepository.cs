@@ -57,10 +57,10 @@ namespace ManageIt.Infrastructure.DataAccess.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<List<Product?>> GetByName(string name)
+        public async Task<Product?> GetByName(string name)
         {
             var collaborators = await _dbContext.Products.AsNoTracking().Include(c => c.ApprovalCertification).ToListAsync();
-            return collaborators.Where(c => c.ProductName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+            return collaborators.Where(c => c.ProductName.Contains(name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
         }
     }
 }
