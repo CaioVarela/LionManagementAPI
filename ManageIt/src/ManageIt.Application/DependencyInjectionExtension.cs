@@ -5,6 +5,7 @@ using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpiredEx
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpiringSoon;
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorById;
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByName;
+using ManageIt.Application.UseCases.Collaborators.Get.GetUpcomingExpiringExams;
 using ManageIt.Application.UseCases.Collaborators.Register;
 using ManageIt.Application.UseCases.Collaborators.Update;
 using ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet;
@@ -44,9 +45,11 @@ namespace ManageIt.Application
             services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();
             services.AddScoped<IDeleteCollaboratorUseCase,  DeleteCollaboratorUseCase>();
             services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
+            services.AddScoped<IDeleteAllProductUseCase, DeleteAllProductUseCase>();
             services.AddScoped<IGetAllCollaboratorsUseCase, GetAllCollaboratorsUseCase>();
             services.AddScoped<IGetAllProductsUseCase, GetAllProductsUseCase>();
             services.AddScoped<IGetCollaboratorByIdUseCase, GetCollaboratorByIdUseCase>();
+            services.AddScoped<IGetUpcomingExpiringExamsUseCase, GetUpcomingExpiringExamsUseCase>();
             services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
             services.AddScoped<IGetExpiredCollaboratorExamUseCase, GetExpiredCollaboratorExamUseCase>();
             services.AddScoped<IGetExpiringSoonCollaboratorExamUseCase, GetExpiringSoonCollaboratorExamUseCase>();

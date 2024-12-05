@@ -38,11 +38,10 @@ namespace ManageIt.Application.UseCases.Excel.AddProductFromSheet
 
                     var startRow = 6;
                     var addedProductsCount = 0;
-                    var editedProductsCount = 0;
 
                     for (int row = startRow; row <= worksheet.Dimension.End.Row; row++)
                     {
-                        if (string.IsNullOrWhiteSpace(worksheet.Cells[row, 1]?.Text))
+                        if (string.IsNullOrWhiteSpace(worksheet.Cells[row, 2]?.Text))
                         {
                             Console.WriteLine($"Linha {row} ignorada: Nome do colaborador está vazio.");
                             continue;

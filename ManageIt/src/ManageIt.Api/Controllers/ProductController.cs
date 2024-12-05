@@ -18,13 +18,13 @@ namespace ManageIt.Api.Controllers
     public class ProductController : ControllerBase
     {
         [HttpGet]
-        [ProducesResponseType(typeof(List<ProductDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseGetAllProducts), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> GetAll([FromServices] IGetAllProductsUseCase useCase)
         {
             var response = await useCase.Execute();
 
-            if (response.Count > 0)
+            if (response.Product.Count > 0)
             {
                 return Ok(response);
             }
@@ -88,6 +88,16 @@ namespace ManageIt.Api.Controllers
         public async Task<IActionResult> Delete([FromServices] IDeleteProductUseCase useCase, [FromRoute] Guid id)
         {
             await useCase.Execute(id);
+
+            return NoContent();
+        }
+
+        [HttpDelete("delete-all")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteAll([FromServices] IDeleteAllProductUseCase useCase)
+        {
+            await useCase.Execute();
 
             return NoContent();
         }

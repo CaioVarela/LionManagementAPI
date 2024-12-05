@@ -32,6 +32,18 @@ namespace ManageIt.Infrastructure.DataAccess.Repositories
             return true;
         }
 
+        public async Task<bool> DeleteAll()
+        {
+            var result = await _dbContext.Products.AsNoTracking().Include(c => c.ApprovalCertification).ToListAsync();
+
+            foreach (var prod in result)
+            {
+                _dbContext.Products.Remove(prod);
+            }
+
+            return true;
+        }
+
         public void Update(Product product)
         {
             _dbContext.Products.Update(product);

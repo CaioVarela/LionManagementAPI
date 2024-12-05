@@ -3,7 +3,7 @@
     public enum PositionEnum
     {
         Eletricist,
-        MachineOperatorDriver,
+        DrillingMachineOperatorDriver,
         ServicesAssistant,
         ConstructionWorker,
         WorkSecurityTecnician,

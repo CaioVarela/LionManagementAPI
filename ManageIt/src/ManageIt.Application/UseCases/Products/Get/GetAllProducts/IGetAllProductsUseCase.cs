@@ -1,9 +1,9 @@
-﻿using ManageIt.Communication.ProductDTOs;
+﻿using ManageIt.Communication.Responses;
 
 namespace ManageIt.Application.UseCases.Products.Get.GetAllProducts
 {
     public interface IGetAllProductsUseCase
     {
-        Task<List<ProductDTO>> Execute();
+        Task<ResponseGetAllProducts> Execute();
     }
 }

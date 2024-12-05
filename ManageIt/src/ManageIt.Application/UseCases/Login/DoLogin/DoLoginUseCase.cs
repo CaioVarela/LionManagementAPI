@@ -40,7 +40,8 @@ namespace ManageIt.Application.UseCases.Login.DoLogin
             return new ResponseRegisteredUserJson
             {
                 Name = user.UserName,
-                Token = _accessTokenGenerator.Generate(user)
+                Token = _accessTokenGenerator.Generate(user),
+                Role = user.Role,
             };
         }
     }

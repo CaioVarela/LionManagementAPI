@@ -47,7 +47,8 @@ namespace ManageIt.Application.UseCases.Users.Register
             return new ResponseRegisteredUserJson
             {
                 Name = userMap.UserName,
-                Token = _accessTokenGenerator.Generate(userMap)
+                Token = _accessTokenGenerator.Generate(userMap),
+                Role = userMap.Role
                 
             };
         }

@@ -142,7 +142,7 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
             switch (row)
             {
                 case "MOTORISTA OPERADOR DE MAQUINA PERFURATRIZ":
-                    return PositionEnum.DrillingMachineOperator;
+                    return PositionEnum.DrillingMachineOperatorDriver;
                 case "AUXILIAR DE SERVIÇOS":
                     return PositionEnum.ServicesAssistant;
                 case "ELETRICISTA":
@@ -165,6 +165,8 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
                     return PositionEnum.ElectricalTechnician;
                 case "OPERADOR DE RETRO-ESCAVADEIRA":
                     return PositionEnum.BackhoeOperator;
+                case "OPERADOR DE MAQ PERFURATRIZ":
+                    return PositionEnum.DrillingMachineOperator;
                 case "ALMOXARIFE":
                     return PositionEnum.Warehouseman;
                 case "SUPERVISOR":
@@ -175,12 +177,14 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
                     return PositionEnum.Chef;
                 case "ASSIST. ADMINISTRATIVO-APRENDIZ":
                     return PositionEnum.ApprenticeAdministrativeAssistant;
-                case "ASSIST. ADMINISTRATIVO":
+                case "ASSIST ADMINISTRATIVO":
                     return PositionEnum.AdministrativeAssistant;
                 case "COORDENADOR":
                     return PositionEnum.Coordinator;
                 case "AUX. ADMINISTRATIVO":
                     return PositionEnum.AdministrativeAssistant;
+                case "GESTOR OPERACIONAL":
+                    return PositionEnum.OperationalManager;
                 default:
                     return PositionEnum.Chef;
             }

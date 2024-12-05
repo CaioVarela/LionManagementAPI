@@ -7,6 +7,7 @@
         public string CPF { get; set; } = string.Empty ;
         public string Position { get; set; } = string.Empty;
         public bool IsFitAtPg { get; set; }
-        public List<CollaboratorExamDTO> Exams { get; set; } = new List<CollaboratorExamDTO>();
+        public string ExamStatus { get; set; } = string.Empty;
+        public List<CollaboratorExamDTO> Exams { get; set; } = [];
     }
 }
