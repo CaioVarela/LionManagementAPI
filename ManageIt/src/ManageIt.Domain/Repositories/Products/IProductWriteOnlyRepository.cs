@@ -6,5 +6,6 @@ namespace ManageIt.Domain.Repositories.Products
     {
         Task Add(Product product);
         Task<bool> Delete(Guid id);
+        Task<bool> DeleteAll();
     }
 }

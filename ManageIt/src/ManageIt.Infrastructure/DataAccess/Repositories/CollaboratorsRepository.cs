@@ -41,7 +41,6 @@ namespace ManageIt.Infrastructure.DataAccess.Repositories
         public async Task Update(Collaborator collaborator)
         {
             _dbContext.Collaborators.Update(collaborator);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<Collaborator>> GetAll()

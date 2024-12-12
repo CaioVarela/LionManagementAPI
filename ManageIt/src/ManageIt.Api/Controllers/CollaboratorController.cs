@@ -4,6 +4,7 @@ using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpiredEx
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpiringSoon;
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorById;
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByName;
+using ManageIt.Application.UseCases.Collaborators.Get.GetUpcomingExpiringExams;
 using ManageIt.Application.UseCases.Collaborators.Register;
 using ManageIt.Application.UseCases.Collaborators.Update;
 using ManageIt.Communication.CollaboratorDTOs;
@@ -48,8 +49,8 @@ namespace ManageIt.Api.Controllers
         }
 
         [HttpGet("expired")]
-        [ProducesResponseType(typeof(List<CollaboratorDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(List<CollaboratorDTO>), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseGetAllCollaboratorsWithExpiringSoonExams), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> GetExpired([FromServices] IGetExpiredCollaboratorExamUseCase useCase)
         {
             var response = await useCase.Execute();
@@ -61,8 +62,8 @@ namespace ManageIt.Api.Controllers
         }
 
         [HttpGet("expiring-soon")]
-        [ProducesResponseType(typeof(List<CollaboratorDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(List<CollaboratorDTO>), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseGetAllCollaboratorsWithExpiringSoonExams), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> GetExpiringSoon([FromServices] IGetExpiringSoonCollaboratorExamUseCase useCase)
         {
             var response = await useCase.Execute();
@@ -79,6 +80,19 @@ namespace ManageIt.Api.Controllers
         public async Task<IActionResult> SearchByName([FromServices] IGetCollaboratorByNameUseCase useCase, string name)
         {
             var response = await useCase.Execute(name);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("upcoming-exams")]
+        [ProducesResponseType(typeof(ExpiringExamDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> GetUpcomingExams([FromServices] IGetUpcomingExpiringExamsUseCase useCase)
+        {
+            var response = await useCase.Execute();
             if (response == null)
             {
                 return NotFound();

@@ -32,6 +32,18 @@ namespace ManageIt.Infrastructure.DataAccess.Repositories
             return true;
         }
 
+        public async Task<bool> DeleteAll()
+        {
+            var result = await _dbContext.Products.AsNoTracking().Include(c => c.ApprovalCertification).ToListAsync();
+
+            foreach (var prod in result)
+            {
+                _dbContext.Products.Remove(prod);
+            }
+
+            return true;
+        }
+
         public void Update(Product product)
         {
             _dbContext.Products.Update(product);
@@ -57,10 +69,10 @@ namespace ManageIt.Infrastructure.DataAccess.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<List<Product?>> GetByName(string name)
+        public async Task<Product?> GetByName(string name)
         {
             var collaborators = await _dbContext.Products.AsNoTracking().Include(c => c.ApprovalCertification).ToListAsync();
-            return collaborators.Where(c => c.ProductName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+            return collaborators.Where(c => c.ProductName.Contains(name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
         }
     }
 }

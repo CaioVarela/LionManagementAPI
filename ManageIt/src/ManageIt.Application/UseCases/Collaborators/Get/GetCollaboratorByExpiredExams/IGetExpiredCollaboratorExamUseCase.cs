@@ -1,4 +1,5 @@
 ﻿using ManageIt.Communication.CollaboratorDTOs;
+using ManageIt.Communication.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpir
 {
     public interface IGetExpiredCollaboratorExamUseCase
     {
-        Task<List<CollaboratorDTO>> Execute();
+        Task<ResponseGetAllCollaboratorsWithExpiringSoonExams> Execute();
     }
 }

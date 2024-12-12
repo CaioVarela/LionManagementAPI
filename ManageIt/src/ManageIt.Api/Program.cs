@@ -66,7 +66,7 @@ builder.Services.AddAuthentication(config =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
-        policy => policy.WithOrigins("http://localhost:3000")
+        policy => policy.WithOrigins("http://localhost:5173")
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });

@@ -5,9 +5,11 @@ using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpiredEx
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpiringSoon;
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorById;
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByName;
+using ManageIt.Application.UseCases.Collaborators.Get.GetUpcomingExpiringExams;
 using ManageIt.Application.UseCases.Collaborators.Register;
 using ManageIt.Application.UseCases.Collaborators.Update;
 using ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet;
+using ManageIt.Application.UseCases.Excel.AddProductFromSheet;
 using ManageIt.Application.UseCases.Login.DoLogin;
 using ManageIt.Application.UseCases.Products.Delete;
 using ManageIt.Application.UseCases.Products.Get.GetAllProducts;
@@ -38,13 +40,16 @@ namespace ManageIt.Application
             services.AddScoped<IRegisterCollaboratorUseCase, RegisterCollaboratorUseCase>();
             services.AddScoped<IAddCollaboratorsBySheetUseCase, AddCollaboratorsBySheetUseCase>();
             services.AddScoped<IRegisterProductUseCase, RegisterProductUseCase>();
+            services.AddScoped<IAddProductFromSheetUseCase, AddProductFromSheetUseCase>();
             services.AddScoped<IUpdateCollaboratorUseCase,  UpdateCollaboratorUseCase>();
             services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();
             services.AddScoped<IDeleteCollaboratorUseCase,  DeleteCollaboratorUseCase>();
             services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
+            services.AddScoped<IDeleteAllProductUseCase, DeleteAllProductUseCase>();
             services.AddScoped<IGetAllCollaboratorsUseCase, GetAllCollaboratorsUseCase>();
             services.AddScoped<IGetAllProductsUseCase, GetAllProductsUseCase>();
             services.AddScoped<IGetCollaboratorByIdUseCase, GetCollaboratorByIdUseCase>();
+            services.AddScoped<IGetUpcomingExpiringExamsUseCase, GetUpcomingExpiringExamsUseCase>();
             services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
             services.AddScoped<IGetExpiredCollaboratorExamUseCase, GetExpiredCollaboratorExamUseCase>();
             services.AddScoped<IGetExpiringSoonCollaboratorExamUseCase, GetExpiringSoonCollaboratorExamUseCase>();

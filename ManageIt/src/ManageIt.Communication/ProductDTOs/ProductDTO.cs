@@ -8,6 +8,7 @@ namespace ManageIt.Communication.ProductDTOs
         public string ProductName { get; set; } = string.Empty;
         public int Balance { get; set; }
         public int MinimumStock { get; set; }
+        public bool IsEPI { get; set; }
         public string Status { get; set; } = string.Empty;
         public int OrderQuantity { get; set; }
         public ApprovalCertification? ApprovalCertification { get; set; }
