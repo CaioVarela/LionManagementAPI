@@ -49,14 +49,14 @@ public class ExamExpirationEmailWorker : BackgroundService
                 }
 
                 var collaborators = await expiringSoonUseCase.Execute();
-                if (!collaborators.Any())
+                if (!collaborators.Collaborator.Any())
                 {
                     _logger.LogInformation("Nenhum exame próximo ao vencimento encontrado");
                     continue;
                 }
 
                 var subject = "ManageIt - Relatório de Exames Próximos ao Vencimento";
-                var body = BuildEmailBody(collaborators);
+                var body = BuildEmailBody(collaborators.Collaborator);
 
                 await emailGenerator.SendEmailAsync(
                     qualityManager.UserEmail,

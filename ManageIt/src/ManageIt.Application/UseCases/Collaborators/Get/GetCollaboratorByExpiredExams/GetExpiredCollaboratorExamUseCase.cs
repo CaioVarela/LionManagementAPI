@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ManageIt.Communication.CollaboratorDTOs;
+using ManageIt.Communication.Responses;
 using ManageIt.Domain.Repositories.Collaborators;
 
 namespace ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpiredExams
@@ -14,11 +15,24 @@ namespace ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpir
             _mapper = mapper;
         }
 
-        public async Task<List<CollaboratorDTO>> Execute()
+        public async Task<ResponseGetAllCollaboratorsWithExpiringSoonExams> Execute()
         {
-            var result = await _repository.GetExpired();
+            var expiredCollaborators = await _repository.GetExpired();
 
-            var resultDTO = _mapper.Map<List<CollaboratorDTO>>(result);
+            var allCollaborators = await _repository.GetAll();
+
+            var collaboratorDTO = _mapper.Map<List<CollaboratorDTO>>(expiredCollaborators);
+
+            var expiredCollaboratorsCount = expiredCollaborators.Count;
+            
+            var collaboratorsWithExpiredExamsPercentage = ((double)expiredCollaboratorsCount / allCollaborators.Count) * 100;
+
+            var resultDTO = new ResponseGetAllCollaboratorsWithExpiringSoonExams()
+            {
+                Collaborator = collaboratorDTO,
+                CollaboratorsCount = allCollaborators.Count,
+                CollaboratorsPercentage = (float)collaboratorsWithExpiredExamsPercentage
+            };
 
             return resultDTO;
         }

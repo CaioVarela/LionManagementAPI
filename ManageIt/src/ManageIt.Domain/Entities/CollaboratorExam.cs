@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ManageIt.Domain.Entities
+﻿namespace ManageIt.Domain.Entities
 {
     public class CollaboratorExam
     {
@@ -38,6 +32,9 @@ namespace ManageIt.Domain.Entities
 
             switch (ExamName.ToLower())
             {
+                case "cnh":
+                    expiryDate = ExamDate;
+                    return expiryDate;
                 case "aso":
                 case "avaliacao psicologica":
                     expiryDate = ExamDate.AddYears(1);

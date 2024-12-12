@@ -11,19 +11,30 @@ namespace ManageIt.Domain.Entities
         public PositionEnum Position { get; set; }
         public List<CollaboratorExam> Exams { get; set; } = [];
         public bool IsFitAtPg => GetIsFitAtPg();
+        public string ExamStatus => SetExamStatus();
 
         private bool GetIsFitAtPg()
         {
-            switch(Position)
+            return true;
+        }
+
+        private string SetExamStatus()
+        {
+            if ((Exams.Any(e => e.IsExpiringSoon)) && (Exams.Any(e => e.IsExpired)))
             {
-                case PositionEnum.ApprenticeAdministrativeAssistant:
-                case PositionEnum.AdministrativeAssistant:
-                case PositionEnum.Chef:
-                case PositionEnum.Watchman:
-                case PositionEnum.Doorman:
-                    return true;
-                default:
-                    return false;
+                return "Has Expired and Expiring Exams";
+            }
+            else if (Exams.Any(e => e.IsExpiringSoon))
+            {
+                return "Has Exams Expiring";
+            }
+            else if (Exams.Any(e => e.IsExpired))
+            {
+                return "Has Expired Exams";
+            }
+            else
+            {
+                return "Ok";
             }
         }
     }

@@ -18,7 +18,7 @@ namespace ManageIt.Application.AutoMapper
         private void RequestToEntity()
         {
             CreateMap<CollaboratorDTO, Collaborator>();
-            CreateMap<ProductDTO, Product>();
+            CreateMap<ProductDTO, Product>().ForMember(dest => dest.Id, config => config.Ignore());
             CreateMap<CollaboratorExamDTO, CollaboratorExam>();
             CreateMap<RequestRegisterUserJson, User>()
                 .ForMember(dest => dest.PasswordHash, config => config.Ignore());
@@ -27,6 +27,7 @@ namespace ManageIt.Application.AutoMapper
         private void EntityToResponse()
         {
             CreateMap<Collaborator, CollaboratorDTO>();
+            CreateMap<Product, ProductDTO>();
             CreateMap<CollaboratorExam, CollaboratorExamDTO>();
             CreateMap<Collaborator, ResponseCollaboratorsDTO>();
             CreateMap<User, ResponseRegisteredUserJson>();
