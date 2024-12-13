@@ -1,6 +1,7 @@
 ﻿using ManageIt.Domain.Email;
 using ManageIt.Domain.Repositories;
 using ManageIt.Domain.Repositories.Collaborators;
+using ManageIt.Domain.Repositories.Companies;
 using ManageIt.Domain.Repositories.Products;
 using ManageIt.Domain.Repositories.User;
 using ManageIt.Domain.Security.Cryptography;
@@ -49,9 +50,12 @@ namespace ManageIt.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICollaboratorWriteOnlyRepository, CollaboratorsRepository>();
             services.AddScoped<IProductWriteOnlyRepository, ProductsRepository>();
+            services.AddScoped<ICompanyWriteOnlyRepository, CompaniesRepository>();
             services.AddScoped<ICollaboratorReadOnlyRepository, CollaboratorsRepository>();
+            services.AddScoped<ICompanyReadOnlyRepository, CompaniesRepository>();
             services.AddScoped<IProductReadOnlyRepository, ProductsRepository>();
             services.AddScoped<ICollaboratorUpdateOnlyRepository, CollaboratorsRepository>();
+            services.AddScoped<ICompanyUpdateOnlyRepository, CompaniesRepository>();
             services.AddScoped<IProductUpdateOnlyRepository, ProductsRepository>();
             services.AddScoped<IUserReadOnlyRepository, UserRepository>();
             services.AddScoped<IUserWriteOnlyRepository, UserRepository>();

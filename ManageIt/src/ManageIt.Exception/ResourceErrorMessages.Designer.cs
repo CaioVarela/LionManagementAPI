@@ -79,6 +79,15 @@ namespace ManageIt.Exception {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a The Company was not found..
+        /// </summary>
+        public static string COMPANY_Invalid {
+            get {
+                return ResourceManager.GetString("COMPANY_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a The CPF is required..
         /// </summary>
         public static string CPF_Required {

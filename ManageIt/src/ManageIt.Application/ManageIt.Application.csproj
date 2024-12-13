@@ -19,4 +19,9 @@
     <ProjectReference Include="..\ManageIt.Exception\ManageIt.Exception.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Companies\Delete\" />
+    <Folder Include="UseCases\Companies\Update\" />
+  </ItemGroup>
+
 </Project>

@@ -4,6 +4,6 @@ namespace ManageIt.Application.UseCases.Collaborators.Get.GetUpcomingExpiringExa
 {
     public interface IGetUpcomingExpiringExamsUseCase
     {
-        Task<List<ExpiringExamDTO>> Execute();
+        Task<List<ExpiringExamDTO>> Execute(Guid companyId);
     }
 }

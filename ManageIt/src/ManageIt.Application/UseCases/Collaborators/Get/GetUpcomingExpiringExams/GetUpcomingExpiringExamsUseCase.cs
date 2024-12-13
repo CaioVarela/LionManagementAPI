@@ -19,9 +19,10 @@ namespace ManageIt.Application.UseCases.Collaborators.Get.GetUpcomingExpiringExa
             _mapper = mapper;
         }
 
-        public async Task<List<ExpiringExamDTO>> Execute()
+        public async Task<List<ExpiringExamDTO>> Execute(Guid companyId)
         {
-            var collaborators = await _repository.GetAll();
+            var getAllcollaborators = await _repository.GetAll();
+            var collaborators = getAllcollaborators.Where(c => c.CompanyId == companyId);
             var collaboratorsDTO = _mapper.Map<List<CollaboratorDTO>>(collaborators);
 
             var today = DateTime.Today;

@@ -23,7 +23,8 @@ namespace ManageIt.Infrastructure.Security.Tokens
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Sid, user.Id.ToString())
+                new Claim(ClaimTypes.Sid, user.Id.ToString()),
+                new Claim("CompanyId", user.CompanyId.ToString())
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

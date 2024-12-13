@@ -6,6 +6,8 @@
         public string ProductName { get; set; } = string.Empty;
         public int Balance { get; set; }
         public int MinimumStock { get; set; }
+        public Guid CompanyId { get; set; }
+        public Company Company { get; set; } = null!;
         public bool IsEPI => HasApprovalCertification();
         public string Status => GetProductStatus();
         public int OrderQuantity => GetOrderQuantity();

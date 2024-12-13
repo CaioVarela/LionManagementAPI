@@ -7,5 +7,6 @@ namespace ManageIt.Domain.Repositories.User
         Task<bool> ExistActiveUserWithEmail(string email);
         Task<Entities.User?> GetUserByEmail(string email);
         Task<Entities.User?> GetQualityManager();
+        Task<Entities.User?> GetById(Guid id);
     }
 }

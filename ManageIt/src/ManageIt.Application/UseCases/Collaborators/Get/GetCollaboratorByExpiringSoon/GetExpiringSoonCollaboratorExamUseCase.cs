@@ -16,11 +16,13 @@ namespace ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpir
             _mapper = mapper;
         }
 
-        public async Task<ResponseGetAllCollaboratorsWithExpiringSoonExams> Execute()
+        public async Task<ResponseGetAllCollaboratorsWithExpiringSoonExams> Execute(Guid companyId)
         {
-            var result = await _repository.GetExpiringSoon();
+            var getExpiringSoon = await _repository.GetExpiringSoon();
+            var result = getExpiringSoon.Where(c => c.CompanyId == companyId);
 
-            var allCollaborators = await _repository.GetAll();
+            var getAllCollaborators = await _repository.GetAll();
+            var allCollaborators = getAllCollaborators.Where(c => c.CompanyId == companyId);
 
             var collaboratorDTOs = _mapper.Map<List<CollaboratorDTO>>(result);
 
@@ -34,7 +36,7 @@ namespace ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpir
             var direcaoDefensivaExpiring = collaboratorDTOs.Count(c => c.Exams is not null && c.Exams.Any(e => e.ExamName == "Direcao Defensiva"));
             var cnhExpiring = collaboratorDTOs.Count(c => c.Exams is not null && c.Exams.Any(e => e.ExamName == "CNH"));
 
-            double collaboratorsWithExpiringSoonExamsPercentage = ((double)expiringCollaboratorsCount / allCollaborators.Count) * 100;
+            double collaboratorsWithExpiringSoonExamsPercentage = ((double)expiringCollaboratorsCount / allCollaborators.Count()) * 100;
 
             var resultDTO = new ResponseGetAllCollaboratorsWithExpiringSoonExams()
             {
