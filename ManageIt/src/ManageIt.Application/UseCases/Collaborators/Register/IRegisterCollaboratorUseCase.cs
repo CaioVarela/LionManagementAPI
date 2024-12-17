@@ -4,6 +4,6 @@ namespace ManageIt.Application.UseCases.Collaborators.Register
 {
     public interface IRegisterCollaboratorUseCase
     {
-        Task<CollaboratorDTO> Execute(CollaboratorDTO collaborator);
+        Task<CollaboratorDTO> Execute(CollaboratorDTO collaborator, Guid companyId);
     }
 }

@@ -21,7 +21,7 @@ namespace ManageIt.Application.UseCases.Collaborators.Register
             _mapper = mapper;
         }
 
-        public async Task Execute(Guid id, CollaboratorDTO collaborator)
+        public async Task Execute(Guid id, CollaboratorDTO collaborator, Guid companyId)
         {
             Validate(collaborator);
 
@@ -33,6 +33,8 @@ namespace ManageIt.Application.UseCases.Collaborators.Register
             }
 
             _mapper.Map(collaborator, collaboratorToUpdate);
+
+            collaboratorToUpdate.CompanyId = companyId;
 
             _repository.Update(collaboratorToUpdate);
 
