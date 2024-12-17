@@ -1,4 +1,5 @@
-﻿using ManageIt.Application.UseCases.Collaborators.Delete;
+﻿using ManageIt.Api.Services;
+using ManageIt.Application.UseCases.Collaborators.Delete;
 using ManageIt.Application.UseCases.Collaborators.Get.GetAllCollaborators;
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpiredExams;
 using ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpiringSoon;
@@ -22,9 +23,16 @@ namespace ManageIt.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<CollaboratorDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetAll([FromServices] IGetAllCollaboratorsUseCase useCase)
+        public async Task<IActionResult> GetAll([FromServices] IGetAllCollaboratorsUseCase useCase, [FromServices] ICurrentUserService currentUserService)
         {
-            var response = await useCase.Execute();
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
+            {
+                return Unauthorized("Company ID not found.");
+            }
+
+            var response = await useCase.Execute((Guid)companyId!);
 
             if (response.Count > 0)
             {
@@ -51,53 +59,89 @@ namespace ManageIt.Api.Controllers
         [HttpGet("expired")]
         [ProducesResponseType(typeof(ResponseGetAllCollaboratorsWithExpiringSoonExams), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetExpired([FromServices] IGetExpiredCollaboratorExamUseCase useCase)
+        public async Task<IActionResult> GetExpired([FromServices] IGetExpiredCollaboratorExamUseCase useCase, [FromServices] ICurrentUserService currentUserService)
         {
-            var response = await useCase.Execute();
-            if (response == null)
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
             {
-                return NotFound();
+                return Unauthorized("Company ID not found.");
             }
-            return Ok(response);
+
+            var response = await useCase.Execute((Guid)companyId);
+
+            if (response.Collaborator.Any())
+            {
+                return Ok(response);
+            }
+
+            return NoContent();
         }
 
         [HttpGet("expiring-soon")]
         [ProducesResponseType(typeof(ResponseGetAllCollaboratorsWithExpiringSoonExams), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetExpiringSoon([FromServices] IGetExpiringSoonCollaboratorExamUseCase useCase)
+        public async Task<IActionResult> GetExpiringSoon([FromServices] IGetExpiringSoonCollaboratorExamUseCase useCase, [FromServices] ICurrentUserService currentUserService)
         {
-            var response = await useCase.Execute();
-            if (response == null)
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
             {
-                return NotFound();
+                return Unauthorized("Company ID not found.");
             }
-            return Ok(response);
+
+            var response = await useCase.Execute((Guid)companyId);
+
+            if (response.Collaborator.Any())
+            {
+                return Ok(response);
+            }
+
+            return NoContent();
         }
 
         [HttpGet("search")]
         [ProducesResponseType(typeof(List<CollaboratorDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(List<CollaboratorDTO>), StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> SearchByName([FromServices] IGetCollaboratorByNameUseCase useCase, string name)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> SearchByName([FromServices] IGetCollaboratorByNameUseCase useCase, [FromServices] ICurrentUserService currentUserService, string name)
         {
-            var response = await useCase.Execute(name);
-            if (response == null)
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
             {
-                return NotFound();
+                return Unauthorized("Company ID not found.");
             }
-            return Ok(response);
+
+            var response = await useCase.Execute(name, (Guid)companyId);
+
+            if (response.Count > 0)
+            {
+                return Ok(response);
+            }
+
+            return NoContent();
         }
 
         [HttpGet("upcoming-exams")]
         [ProducesResponseType(typeof(ExpiringExamDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetUpcomingExams([FromServices] IGetUpcomingExpiringExamsUseCase useCase)
+        public async Task<IActionResult> GetUpcomingExams([FromServices] IGetUpcomingExpiringExamsUseCase useCase, [FromServices] ICurrentUserService currentUserService)
         {
-            var response = await useCase.Execute();
-            if (response == null)
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
             {
-                return NotFound();
+                return Unauthorized("Company ID not found.");
             }
-            return Ok(response);
+
+            var response = await useCase.Execute((Guid)companyId);
+
+            if (response != null && response.Any())
+            {
+                return Ok(response);
+            }
+
+            return NoContent();
         }
 
         [HttpPost]

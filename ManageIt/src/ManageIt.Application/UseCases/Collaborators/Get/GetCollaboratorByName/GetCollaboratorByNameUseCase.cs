@@ -16,13 +16,15 @@ namespace ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorById
             _mapper = mapper;
         }
 
-        public async Task<List<CollaboratorDTO>> Execute(string  name)
+        public async Task<List<CollaboratorDTO>> Execute(string  name, Guid companyId)
         {
-            var result = await _repository.GetByName(name);
+            var getByName = await _repository.GetByName(name);
+            var result = getByName.CompanyId == companyId;
 
-            var resultDTO = _mapper.Map<List<CollaboratorDTO>>(result);
+            if(result)
+                return _mapper.Map<List<CollaboratorDTO>>(getByName);
 
-            return resultDTO;
+            return [];
         }
     }
 }

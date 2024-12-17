@@ -38,6 +38,18 @@ namespace ManageIt.Infrastructure.DataAccess.Repositories
             return true;
         }
 
+        public async Task<bool> DeleteAll()
+        {
+            var result = await _dbContext.Collaborators.AsNoTracking().Include(c => c.Exams).ToListAsync();
+
+            foreach (var collaborators in result)
+            {
+                _dbContext.Collaborators.Remove(collaborators);
+            }
+
+            return true;
+        }
+
         public async Task Update(Collaborator collaborator)
         {
             _dbContext.Collaborators.Update(collaborator);

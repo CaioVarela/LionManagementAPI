@@ -5,6 +5,6 @@ namespace ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpir
 {
     public interface IGetExpiringSoonCollaboratorExamUseCase
     {
-        Task<ResponseGetAllCollaboratorsWithExpiringSoonExams> Execute();
+        Task<ResponseGetAllCollaboratorsWithExpiringSoonExams> Execute(Guid companyId);
     }
 }
