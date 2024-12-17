@@ -19,12 +19,13 @@ namespace ManageIt.Application.UseCases.Collaborators.Register
             _mapper = mapper;
         }
 
-        public async Task<CollaboratorDTO> Execute(CollaboratorDTO collaborator)
+        public async Task<CollaboratorDTO> Execute(CollaboratorDTO collaborator, Guid companyId)
         {
             var collaboratorMap = _mapper.Map<Collaborator>(collaborator);
             var collaboratorExamsMap = _mapper.Map<List<CollaboratorExam>>(collaborator.Exams);
 
             collaboratorMap.Exams = collaboratorExamsMap;
+            collaboratorMap.CompanyId = companyId;
 
             await _repository.Add(collaboratorMap);
             await _unitOfWork.Commit();

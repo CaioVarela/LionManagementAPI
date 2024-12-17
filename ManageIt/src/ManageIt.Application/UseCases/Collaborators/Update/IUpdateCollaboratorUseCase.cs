@@ -4,6 +4,6 @@ namespace ManageIt.Application.UseCases.Collaborators.Update
 {
     public interface IUpdateCollaboratorUseCase
     {
-        Task Execute(Guid id, CollaboratorDTO collaborator);
+        Task Execute(Guid id, CollaboratorDTO collaborator, Guid companyId);
     }
 }
