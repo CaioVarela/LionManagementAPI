@@ -4,6 +4,6 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
 {
     public interface IAddCollaboratorsBySheetUseCase
     {
-        public Task<ResponseImportedFromSheet> Execute(Stream excelStream);
+        public Task<ResponseImportedFromSheet> Execute(Stream excelStream, Guid companyId);
     }
 }
