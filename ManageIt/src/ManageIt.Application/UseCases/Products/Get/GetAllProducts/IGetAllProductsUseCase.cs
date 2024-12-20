@@ -4,6 +4,6 @@ namespace ManageIt.Application.UseCases.Products.Get.GetAllProducts
 {
     public interface IGetAllProductsUseCase
     {
-        Task<ResponseGetAllProducts> Execute();
+        Task<ResponseGetAllProducts> Execute(Guid companyId);
     }
 }

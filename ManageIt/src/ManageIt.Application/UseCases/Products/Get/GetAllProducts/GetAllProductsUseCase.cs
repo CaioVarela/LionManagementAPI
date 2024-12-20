@@ -16,16 +16,17 @@ namespace ManageIt.Application.UseCases.Products.Get.GetAllProducts
             _mapper = mapper;
         }
 
-        public async Task<ResponseGetAllProducts> Execute()
+        public async Task<ResponseGetAllProducts> Execute(Guid companyId)
         {
-            var result = await _repository.GetAll();
+            var getAllresult = await _repository.GetAll();
+            var result = getAllresult.Where(p => p.CompanyId == companyId);
 
             var productsDTO = _mapper.Map<List<ProductDTO>>(result);
 
             var okProductsInStock = result.Count(p => p.Status == "Estoque Adequado");
             var okEpiProductsInStock = result.Count(p => p.Status == "Estoque Adequado" && p.IsEPI == true);
 
-            var okStockPercentage = ((double)okProductsInStock / result.Count) * 100;
+            var okStockPercentage = ((double)okProductsInStock / result.Count()) * 100;
 
             var okApprovalCertificationDate = result.Where(p => p.IsEPI).Count(p => p.ApprovalCertification!.IsCertificationExpired);
 

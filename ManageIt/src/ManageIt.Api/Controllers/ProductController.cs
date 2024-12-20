@@ -1,4 +1,5 @@
-﻿using ManageIt.Application.UseCases.Products.Delete;
+﻿using ManageIt.Api.Services;
+using ManageIt.Application.UseCases.Products.Delete;
 using ManageIt.Application.UseCases.Products.Get.GetAllProducts;
 using ManageIt.Application.UseCases.Products.Get.GetProductById;
 using ManageIt.Application.UseCases.Products.Get.GetProductByName;
@@ -20,9 +21,18 @@ namespace ManageIt.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ResponseGetAllProducts), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetAll([FromServices] IGetAllProductsUseCase useCase)
+        public async Task<IActionResult> GetAll(
+            [FromServices] IGetAllProductsUseCase useCase,
+            [FromServices] ICurrentUserService currentUserService)
         {
-            var response = await useCase.Execute();
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
+            {
+                return Unauthorized("Company ID not found.");
+            }
+
+            var response = await useCase.Execute(companyId.Value);
 
             if (response.Product.Count > 0)
             {
@@ -49,22 +59,43 @@ namespace ManageIt.Api.Controllers
         [HttpGet("search")]
         [ProducesResponseType(typeof(List<ProductDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(List<ProductDTO>), StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> SearchByName([FromServices] IGetProductByNameUseCase useCase, string name)
+        public async Task<IActionResult> SearchByName(
+            [FromServices] IGetProductByNameUseCase useCase,
+            [FromServices] ICurrentUserService currentUserService,
+            string name)
         {
-            var response = await useCase.Execute(name);
-            if (response == null)
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
             {
-                return NotFound();
+                return Unauthorized("Company ID not found.");
             }
-            return Ok(response);
+
+            var response = await useCase.Execute(name, companyId.Value);
+
+            if (response.Count > 0)
+            {
+                return Ok(response);
+            }
+
+            return NoContent();
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(ProductDTO), StatusCodes.Status201Created)]
-        //[ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Add([FromBody] ProductDTO productDTO, [FromServices] IRegisterProductUseCase useCase)
+        public async Task<IActionResult> Add(
+            [FromBody] ProductDTO productDTO,
+            [FromServices] IRegisterProductUseCase useCase,
+            [FromServices] ICurrentUserService currentUserService)
         {
-            var response = await useCase.Execute(productDTO);
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
+            {
+                return Unauthorized("Company ID not found.");
+            }
+
+            var response = await useCase.Execute(productDTO, companyId.Value);
 
             return Created(string.Empty, response);
         }
@@ -74,9 +105,20 @@ namespace ManageIt.Api.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update([FromServices] IUpdateProductUseCase useCase, [FromRoute] Guid id, [FromBody] ProductDTO product)
+        public async Task<IActionResult> Update(
+            [FromServices] IUpdateProductUseCase useCase,
+            [FromServices] ICurrentUserService currentUserService,
+            [FromRoute] Guid id,
+            [FromBody] ProductDTO product)
         {
-            await useCase.Execute(id, product);
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
+            {
+                return Unauthorized("Company ID not found.");
+            }
+
+            await useCase.Execute(id, product, companyId.Value);
 
             return NoContent();
         }
@@ -85,19 +127,37 @@ namespace ManageIt.Api.Controllers
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete([FromServices] IDeleteProductUseCase useCase, [FromRoute] Guid id)
+        public async Task<IActionResult> Delete(
+            [FromServices] IDeleteProductUseCase useCase,
+            [FromServices] ICurrentUserService currentUserService,
+            [FromRoute] Guid id)
         {
-            await useCase.Execute(id);
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
+            {
+                return Unauthorized("Company ID not found.");
+            }
+
+            await useCase.Execute(id, companyId.Value);
 
             return NoContent();
         }
 
         [HttpDelete("delete-all")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteAll([FromServices] IDeleteAllProductUseCase useCase)
+        public async Task<IActionResult> DeleteAll(
+            [FromServices] IDeleteAllProductUseCase useCase,
+            [FromServices] ICurrentUserService currentUserService)
         {
-            await useCase.Execute();
+            var companyId = currentUserService.GetCurrentCompanyId();
+
+            if (companyId == null)
+            {
+                return Unauthorized("Company ID not found.");
+            }
+
+            await useCase.Execute(companyId.Value);
 
             return NoContent();
         }

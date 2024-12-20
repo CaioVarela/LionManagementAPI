@@ -23,7 +23,7 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
             _collaboratorUpdateOnlyRepository = collaboratorUpdateOnlyRepository;
         }
 
-        public async Task<ResponseImportedFromSheet> Execute(Stream excelStream)
+        public async Task<ResponseImportedFromSheet> Execute(Stream excelStream, Guid companyId)
         {
 
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
@@ -60,6 +60,8 @@ namespace ManageIt.Application.UseCases.Excel.AddCollaboratorsBySheet
                             var collaborator = await _collaboratorReadOnlyRepository.GetByName(name) ?? new Collaborator { Name = name, CPF = cpf, Position = position };
 
                             AddOrUpdateExamsFromRow(collaborator, worksheet, row);
+
+                            collaborator.CompanyId = companyId;
 
                             if (collaborator.Id == Guid.Empty)
                             {

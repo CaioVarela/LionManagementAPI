@@ -1,7 +1,6 @@
 ﻿using ManageIt.Communication.Responses;
 using ManageIt.Domain.Entities;
 using ManageIt.Domain.Repositories;
-using ManageIt.Domain.Repositories.Collaborators;
 using ManageIt.Domain.Repositories.Products;
 using OfficeOpenXml;
 
@@ -21,7 +20,7 @@ namespace ManageIt.Application.UseCases.Excel.AddProductFromSheet
             _productWriteOnlyRepository = productWriteOnlyRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ResponseImportedFromSheet> Execute(Stream excelStream)
+        public async Task<ResponseImportedFromSheet> Execute(Stream excelStream, Guid companyId)
         {
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
@@ -61,6 +60,9 @@ namespace ManageIt.Application.UseCases.Excel.AddProductFromSheet
                             {
                                 product.ApprovalCertification = appprovalCertification;
                             }
+
+                            product.CompanyId = companyId;
+
                             await _productWriteOnlyRepository.Add(product);
                             await _unitOfWork.Commit();
                             addedProductsCount++;
