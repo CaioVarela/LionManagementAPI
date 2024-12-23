@@ -67,7 +67,7 @@ builder.Services.AddAuthentication(config =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
-        policy => policy.WithOrigins("http://localhost:5173")
+        policy => policy.WithOrigins("http://localhost:5173", "https://lion-management-web.vercel.app/")
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
