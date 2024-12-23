@@ -25,6 +25,11 @@ namespace ManageIt.Infrastructure.DataAccess.Repositories
         {
             return await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(user => user.UserEmail.Equals(email));
         }
+        
+        public async Task<User?> GetById(Guid id)
+        {
+            return await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id);
+        }
 
         public async Task<User?> GetQualityManager()
         {

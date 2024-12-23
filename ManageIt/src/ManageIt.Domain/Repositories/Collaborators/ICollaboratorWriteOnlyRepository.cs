@@ -6,5 +6,6 @@ namespace ManageIt.Domain.Repositories.Collaborators
     {
         Task Add(Collaborator collaborator);
         Task<bool> Delete(Guid id);
+        Task<bool> DeleteAll();
     }
 }

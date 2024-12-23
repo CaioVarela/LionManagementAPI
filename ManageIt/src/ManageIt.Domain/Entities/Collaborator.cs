@@ -10,6 +10,8 @@ namespace ManageIt.Domain.Entities
         public string? Phone { get; set; }
         public PositionEnum Position { get; set; }
         public List<CollaboratorExam> Exams { get; set; } = [];
+        public Guid CompanyId { get; set; }
+        public Company Company { get; set; } = null!;
         public bool IsFitAtPg => GetIsFitAtPg();
         public string ExamStatus => SetExamStatus();
 

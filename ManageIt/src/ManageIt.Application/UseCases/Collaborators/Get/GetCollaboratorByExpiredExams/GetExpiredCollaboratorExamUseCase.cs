@@ -15,22 +15,24 @@ namespace ManageIt.Application.UseCases.Collaborators.Get.GetCollaboratorByExpir
             _mapper = mapper;
         }
 
-        public async Task<ResponseGetAllCollaboratorsWithExpiringSoonExams> Execute()
+        public async Task<ResponseGetAllCollaboratorsWithExpiringSoonExams> Execute(Guid companyId)
         {
-            var expiredCollaborators = await _repository.GetExpired();
+            var getExpiredCollaborators = await _repository.GetExpired();
+            var expiredCollaborators = getExpiredCollaborators.Where(c => c.CompanyId == companyId);
 
-            var allCollaborators = await _repository.GetAll();
+            var getAllCollaborators = await _repository.GetAll();
+            var allCollaborators = getAllCollaborators.Where(c => c.CompanyId == companyId);
 
             var collaboratorDTO = _mapper.Map<List<CollaboratorDTO>>(expiredCollaborators);
 
-            var expiredCollaboratorsCount = expiredCollaborators.Count;
+            var expiredCollaboratorsCount = expiredCollaborators.Count();
             
-            var collaboratorsWithExpiredExamsPercentage = ((double)expiredCollaboratorsCount / allCollaborators.Count) * 100;
+            var collaboratorsWithExpiredExamsPercentage = ((double)expiredCollaboratorsCount / allCollaborators.Count()) * 100;
 
             var resultDTO = new ResponseGetAllCollaboratorsWithExpiringSoonExams()
             {
                 Collaborator = collaboratorDTO,
-                CollaboratorsCount = allCollaborators.Count,
+                CollaboratorsCount = allCollaborators.Count(),
                 CollaboratorsPercentage = (float)collaboratorsWithExpiredExamsPercentage
             };
 

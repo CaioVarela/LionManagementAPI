@@ -19,17 +19,19 @@ namespace ManageIt.Application.UseCases.Products.Register
             _mapper = mapper;
         }
 
-        public async Task<ProductDTO> Execute(ProductDTO product)
+        public async Task<ProductDTO> Execute(ProductDTO product, Guid companyId)
         {
-            var productMap = _mapper.Map<Product>(product);
+            var productMapped = _mapper.Map<Product>(product);
             var productApprovalCertificationMap = _mapper.Map<ApprovalCertification>(product.ApprovalCertification);
 
-            productMap.ApprovalCertification = productApprovalCertificationMap;
+            productMapped.ApprovalCertification = productApprovalCertificationMap;
 
-            await _repository.Add(productMap);
+            productMapped.CompanyId = companyId;
+
+            await _repository.Add(productMapped);
             await _unitOfWork.Commit();
 
-            return _mapper.Map<ProductDTO>(productMap);
+            return _mapper.Map<ProductDTO>(productMapped);
         }
     }
 }

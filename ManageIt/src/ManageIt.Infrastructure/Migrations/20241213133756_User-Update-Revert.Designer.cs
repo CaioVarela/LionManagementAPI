@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManageIt.Infrastructure.Migrations
 {
     [DbContext(typeof(CollaboratorDbContext))]
-    [Migration("20241027185259_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20241213133756_User-Update-Revert")]
+    partial class UserUpdateRevert
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,8 +58,10 @@ namespace ManageIt.Infrastructure.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CPF")
-                        .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -68,7 +70,12 @@ namespace ManageIt.Infrastructure.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Collaborators");
                 });
@@ -99,6 +106,28 @@ namespace ManageIt.Infrastructure.Migrations
                     b.ToTable("CollaboratorExams");
                 });
 
+            modelBuilder.Entity("ManageIt.Domain.Entities.Company", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CNPJ")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("CompanyType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Companies");
+                });
+
             modelBuilder.Entity("ManageIt.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -107,6 +136,9 @@ namespace ManageIt.Infrastructure.Migrations
 
                     b.Property<int>("Balance")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("MinimumStock")
                         .HasColumnType("int");
@@ -117,6 +149,8 @@ namespace ManageIt.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("Products");
                 });
 
@@ -126,7 +160,18 @@ namespace ManageIt.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserEmail")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -135,6 +180,8 @@ namespace ManageIt.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Users");
                 });
@@ -148,18 +195,62 @@ namespace ManageIt.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ManageIt.Domain.Entities.Collaborator", b =>
+                {
+                    b.HasOne("ManageIt.Domain.Entities.Company", "Company")
+                        .WithMany("Collaborators")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("ManageIt.Domain.Entities.CollaboratorExam", b =>
                 {
-                    b.HasOne("ManageIt.Domain.Entities.Collaborator", null)
+                    b.HasOne("ManageIt.Domain.Entities.Collaborator", "Collaborator")
                         .WithMany("Exams")
                         .HasForeignKey("CollaboratorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Collaborator");
+                });
+
+            modelBuilder.Entity("ManageIt.Domain.Entities.Product", b =>
+                {
+                    b.HasOne("ManageIt.Domain.Entities.Company", "Company")
+                        .WithMany("Products")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("ManageIt.Domain.Entities.User", b =>
+                {
+                    b.HasOne("ManageIt.Domain.Entities.Company", "Company")
+                        .WithMany("Users")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("ManageIt.Domain.Entities.Collaborator", b =>
                 {
                     b.Navigation("Exams");
+                });
+
+            modelBuilder.Entity("ManageIt.Domain.Entities.Company", b =>
+                {
+                    b.Navigation("Collaborators");
+
+                    b.Navigation("Products");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("ManageIt.Domain.Entities.Product", b =>

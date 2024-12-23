@@ -48,7 +48,7 @@ public class ExamExpirationEmailWorker : BackgroundService
                     continue;
                 }
 
-                var collaborators = await expiringSoonUseCase.Execute();
+                var collaborators = await expiringSoonUseCase.Execute(qualityManager.CompanyId);
                 if (!collaborators.Collaborator.Any())
                 {
                     _logger.LogInformation("Nenhum exame próximo ao vencimento encontrado");

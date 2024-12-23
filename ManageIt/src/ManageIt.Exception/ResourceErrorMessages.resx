@@ -123,6 +123,9 @@
   <data name="COLLABORATOR_NOT_FOUND" xml:space="preserve">
     <value>Collaborator not found.</value>
   </data>
+  <data name="COMPANY_Invalid" xml:space="preserve">
+    <value>The Company was not found.</value>
+  </data>
   <data name="CPF_Required" xml:space="preserve">
     <value>The CPF is required.</value>
   </data>

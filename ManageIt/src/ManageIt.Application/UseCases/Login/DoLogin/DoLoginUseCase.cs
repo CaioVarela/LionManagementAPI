@@ -1,5 +1,6 @@
 ﻿using ManageIt.Communication.Requests;
 using ManageIt.Communication.Responses;
+using ManageIt.Domain.Repositories.Companies;
 using ManageIt.Domain.Repositories.User;
 using ManageIt.Domain.Security.Cryptography;
 using ManageIt.Domain.Security.Tokens;
@@ -12,13 +13,15 @@ namespace ManageIt.Application.UseCases.Login.DoLogin
         private readonly IUserReadOnlyRepository _repository;
         private readonly IPasswordEncripter _passwordEncripter;
         private readonly IAccessTokenGenerator _accessTokenGenerator;
+        private readonly ICompanyReadOnlyRepository _companyReadOnlyRepository;
 
 
-        public DoLoginUseCase(IUserReadOnlyRepository repository, IPasswordEncripter passwordEncripter, IAccessTokenGenerator accessTokenGenerator)
+        public DoLoginUseCase(IUserReadOnlyRepository repository, IPasswordEncripter passwordEncripter, IAccessTokenGenerator accessTokenGenerator, ICompanyReadOnlyRepository companyReadOnlyRepository)
         {
             _repository = repository;
             _passwordEncripter = passwordEncripter;
             _accessTokenGenerator = accessTokenGenerator;
+            _companyReadOnlyRepository = companyReadOnlyRepository;
         }
 
         public async Task<ResponseRegisteredUserJson> Execute(RequestLoginJson request)
@@ -37,11 +40,15 @@ namespace ManageIt.Application.UseCases.Login.DoLogin
                 throw new InvalidLoginException();
             }
 
+            var company = await _companyReadOnlyRepository.GetById(user.CompanyId);
+
             return new ResponseRegisteredUserJson
             {
                 Name = user.UserName,
                 Token = _accessTokenGenerator.Generate(user),
                 Role = user.Role,
+                CompanyName = company.Name,
+                CompanyId = company.Id
             };
         }
     }

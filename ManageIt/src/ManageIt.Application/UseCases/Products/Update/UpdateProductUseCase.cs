@@ -21,13 +21,17 @@ namespace ManageIt.Application.UseCases.Products.Register
             _mapper = mapper;
         }
 
-        public async Task Execute(Guid id, ProductDTO product)
+        public async Task Execute(Guid id, ProductDTO product, Guid companyId)
         {
             Validate(product);
 
             var productToUpdate = await _repository.GetById(id);
 
             if (productToUpdate == null) 
+            {
+                throw new NotFoundException(ResourceErrorMessages.COLLABORATOR_NOT_FOUND);
+            }
+            else if (productToUpdate.CompanyId != companyId)
             {
                 throw new NotFoundException(ResourceErrorMessages.COLLABORATOR_NOT_FOUND);
             }

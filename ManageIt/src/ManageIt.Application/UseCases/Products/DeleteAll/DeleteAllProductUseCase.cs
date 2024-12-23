@@ -8,16 +8,25 @@ namespace ManageIt.Application.UseCases.Products.Delete
     internal class DeleteAllProductUseCase : IDeleteAllProductUseCase
     {
         private readonly IProductWriteOnlyRepository _repository;
+        private readonly IProductReadOnlyRepository _readOnlyRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public DeleteAllProductUseCase(IProductWriteOnlyRepository repository, IUnitOfWork unitOfWork)
+        public DeleteAllProductUseCase(IProductWriteOnlyRepository repository, IProductReadOnlyRepository readOnlyrepository, IUnitOfWork unitOfWork)
         {
             _repository = repository;
+            _readOnlyRepository = readOnlyrepository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Execute()
+        public async Task Execute(Guid companyId)
         {
-            var result = await _repository.DeleteAll();
+            var getAll = await _readOnlyRepository.GetAll();
+            var productsToDelete = getAll.Where(p => p.CompanyId == companyId);
+
+            var result = false;
+            foreach (var product in productsToDelete) 
+            {
+                result = await _repository.Delete(product.Id);
+            }
 
             if (result is false)
             {
