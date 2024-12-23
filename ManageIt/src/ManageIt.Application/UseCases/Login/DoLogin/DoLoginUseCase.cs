@@ -40,14 +40,15 @@ namespace ManageIt.Application.UseCases.Login.DoLogin
                 throw new InvalidLoginException();
             }
 
-            var companyName = await _companyReadOnlyRepository.GetById(user.CompanyId);
+            var company = await _companyReadOnlyRepository.GetById(user.CompanyId);
 
             return new ResponseRegisteredUserJson
             {
                 Name = user.UserName,
                 Token = _accessTokenGenerator.Generate(user),
                 Role = user.Role,
-                CompanyName = companyName.Name
+                CompanyName = company.Name,
+                CompanyId = company.Id
             };
         }
     }
