@@ -79,12 +79,9 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseCors("AllowFrontendApp");
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseCors("AllowFrontendApp");
 
 app.UseHttpsRedirection();
 

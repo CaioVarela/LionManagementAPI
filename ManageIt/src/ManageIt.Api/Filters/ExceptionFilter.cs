@@ -34,7 +34,7 @@ namespace ManageIt.Api.Filters
             var errorResponse = new ResponseErrorJson(ResourceErrorMessages.UNKNOWN_ERROR);
 
             context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            context.Result = new ObjectResult(context.Result!.ToString());
+            context.Result = new ObjectResult(context.Exception!.ToString());
         }
     }
 }
